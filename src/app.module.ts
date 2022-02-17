@@ -4,11 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    UsersModule,
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         PORT: Joi.string(),
