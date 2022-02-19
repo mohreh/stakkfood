@@ -19,7 +19,7 @@ export class UsersService {
 
     try {
       return await this.usersRepo.save(user);
-    } catch (err) {
+    } catch (err: any) {
       throw new InternalServerErrorException(err.message);
     }
   }
