@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 import { IsPhoneNumber, IsString } from 'class-validator';
-import { CoreEntity } from 'src/common/entities/core.entity';
+import { CoreEntity } from 'server/common/entities/core.entity';
 import { Column, Entity } from 'typeorm';
 
 @Entity() // we don't want user password and hashing, instead use custom auth method with phone number, maybe googleauth in future

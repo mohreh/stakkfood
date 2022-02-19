@@ -12,7 +12,7 @@ import { UsersModule } from './users/users.module';
   imports: [
     ConfigModule.forRoot({
       validationSchema: Joi.object({
-        PORT: Joi.string(),
+        SERVER_PORT: Joi.string(),
         NODE_ENV: Joi.string()
           .required()
           .valid('development', 'test', 'production'),
