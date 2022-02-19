@@ -4,17 +4,19 @@
 </template>
 
 <script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator';
 import { Context } from '@nuxt/types';
-import Vue from 'vue';
 
-export default Vue.extend({
-  name: 'IndexPage',
+@Component({
+  name: 'index',
+})
+export default class Index extends Vue {
   async asyncData({ $axios }: Context) {
-    const hello = (await $axios.get('/')).data;
+    const hello = await (await $axios.get('/')).data;
 
     return {
       hello,
     };
-  },
-});
+  }
+}
 </script>

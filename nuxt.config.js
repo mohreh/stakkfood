@@ -1,7 +1,6 @@
 import bootstrap from './.nest/prod.js';
 
 const isDev = process.env.NODE_ENV === 'development';
-console.log(isDev);
 
 export default async () => ({
   srcDir: 'client/',
