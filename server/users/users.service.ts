@@ -14,7 +14,15 @@ export class UsersService {
     return this.usersRepo.find();
   }
 
-  async create(createUserDto: CreateUserDto) {
+  async findByPhoneNumber(phoneNumber: string): Promise<User> {
+    return (await this.usersRepo.find({ phoneNumber }))[0];
+  }
+
+  findById(id: string): Promise<User> {
+    return this.usersRepo.findOne(id);
+  }
+
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const user = this.usersRepo.create(createUserDto);
 
     try {

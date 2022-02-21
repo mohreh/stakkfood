@@ -1,7 +1,17 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterActionDto } from './dtos/register-action.dto';
-import { VerifyPinDto } from './dtos/verify-pin.dto';
+import { JwtToken } from './interfaces/jwt-payload.interface';
+
+declare global {
+  namespace Express {
+    interface User {
+      id?: string | undefined;
+    }
+  }
+}
 
 @Controller('auth')
 export class AuthController {
@@ -14,7 +24,14 @@ export class AuthController {
   }
 
   @Post('verify')
-  async verifyAuthenticationCode(@Body() verifyPinDto: VerifyPinDto) {
-    return await this.authService.verifyAuthenticationCode(verifyPinDto);
+  @UseGuards(AuthGuard('auth_code'))
+  verifyUser(@Req() req: Request): JwtToken {
+    return this.authService.login({ id: req.user.id });
+  }
+
+  @Get('profile')
+  @UseGuards(AuthGuard('jwt'))
+  getProfile(@Req() req: Request) {
+    return req.user;
   }
 }

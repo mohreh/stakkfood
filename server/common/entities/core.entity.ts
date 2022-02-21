@@ -1,3 +1,4 @@
+import { Exclude, Expose } from 'class-transformer';
 import {
   BeforeInsert,
   CreateDateColumn,
@@ -8,6 +9,7 @@ import { idGenerator } from '../nanoid';
 
 export class CoreEntity {
   @PrimaryColumn('varchar')
+  @Expose()
   id: string;
 
   @CreateDateColumn()

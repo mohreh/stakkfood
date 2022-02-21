@@ -18,6 +18,8 @@ import { SmsModule } from './sms/sms.module';
       validationSchema: Joi.object({
         SERVER_PORT: Joi.string(),
         GHASEDAK_KEY: Joi.string().required(),
+        JWT_SECRET: Joi.string().required(),
+        JWT_EXPIRATION: Joi.string().required(),
         NODE_ENV: Joi.string()
           .required()
           .valid('development', 'test', 'production'),
