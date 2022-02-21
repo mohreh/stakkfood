@@ -2,17 +2,22 @@ import { Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { AuthCode } from './auth/entities/auth-code.entity';
+import { SmsModule } from './sms/sms.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         SERVER_PORT: Joi.string(),
+        GHASEDAK_KEY: Joi.string().required(),
         NODE_ENV: Joi.string()
           .required()
           .valid('development', 'test', 'production'),
@@ -37,11 +42,14 @@ import { UsersModule } from './users/users.module';
           database: config.get('DB_NAME'),
           synchronize: config.get('NODE_ENV') !== 'production',
           logging: config.get('NODE_ENV') !== 'production',
-          entities: [User],
+          entities: [User, AuthCode],
         };
       },
     }),
+    ScheduleModule.forRoot(),
     UsersModule,
+    AuthModule,
+    SmsModule,
   ],
   controllers: [AppController],
   providers: [
