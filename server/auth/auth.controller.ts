@@ -1,8 +1,17 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Session,
+  UseGuards,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterActionDto } from './dtos/register-action.dto';
+import { AuthCodeGuard } from './guards/authentication-code.guard';
+import { JwtAuthGuard } from './guards/jwt.guard';
 import { JwtToken } from './interfaces/jwt-payload.interface';
 
 declare global {
@@ -24,14 +33,15 @@ export class AuthController {
   }
 
   @Post('verify')
-  @UseGuards(AuthGuard('auth_code'))
+  @UseGuards(AuthCodeGuard)
   verifyUser(@Req() req: Request): JwtToken {
     return this.authService.login({ id: req.user.id });
   }
 
   @Get('profile')
-  @UseGuards(AuthGuard('jwt'))
-  getProfile(@Req() req: Request) {
+  @UseGuards(JwtAuthGuard)
+  getProfile(@Req() req: Request, @Session() session) {
+    console.log(session);
     return req.user;
   }
 }
