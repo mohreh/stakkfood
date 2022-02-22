@@ -1,8 +1,16 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CreateUserDto } from './dtos/create-user.dto';
+import { Controller, Get, Req } from '@nestjs/common';
+import { Request } from 'express';
 import { UserDto } from './dtos/user.dto';
 import { UsersService } from './users.service';
 import { Serialize } from 'server/common/interceptors/serialize.interceptor';
+
+declare global {
+  namespace Express {
+    interface User {
+      id?: string | undefined;
+    }
+  }
+}
 
 @Controller('users')
 @Serialize(UserDto)
@@ -14,8 +22,8 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Post('') // this method will be removed and handle user registration from auth module in future
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @Get('profile')
+  getProfile(@Req() req: Request) {
+    return req.user;
   }
 }
