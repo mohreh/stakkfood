@@ -4,7 +4,7 @@ import { Request } from 'express';
 import { Strategy } from 'passport-custom';
 import { AuthService } from '../auth.service';
 import { LoginDto } from '../dtos/login.dto';
-import { VerifyPinDto } from '../dtos/verify-pin.dto';
+import { VerifyAuthCodeDto } from '../dtos/verify-pin.dto';
 
 @Injectable()
 export class AuthCodeStrategy extends PassportStrategy(Strategy, 'auth_code') {
@@ -13,7 +13,7 @@ export class AuthCodeStrategy extends PassportStrategy(Strategy, 'auth_code') {
   }
 
   async validate(req: Request): Promise<LoginDto> {
-    const { reqId, pin } = req.body as VerifyPinDto;
+    const { reqId, pin } = req.body as VerifyAuthCodeDto;
     const phoneNumber = await this.authService.verifyAuthenticationCode(
       reqId,
       pin,

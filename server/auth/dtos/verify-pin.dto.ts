@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class VerifyPinDto {
+export class VerifyAuthCodeDto {
   @IsString()
   reqId: string;
 
