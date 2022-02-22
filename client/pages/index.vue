@@ -12,7 +12,7 @@ import { Context } from '@nuxt/types';
 })
 export default class Index extends Vue {
   async asyncData({ $axios }: Context) {
-    const hello = await (await $axios.get('/')).data;
+    const hello = (await $axios.get('/')).data;
 
     return {
       hello,

@@ -10,7 +10,7 @@ export class AuthCode extends CoreEntity {
 
   @Column({ unique: true })
   @IsPhoneNumber('IR')
-  receptor: string;
+  phoneNumber: string;
 
   @Column({
     type: Date,

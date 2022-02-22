@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { isDev } from '../common/common.constants';
 import { authenticationCodeGenerator } from '../common/nanoid';
+import { SmsService } from '../sms/sms.service';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { LoginDto } from './dtos/login.dto';
@@ -21,20 +22,21 @@ export class AuthService {
     @InjectRepository(AuthCode)
     private readonly authCodeRepo: Repository<AuthCode>,
     private readonly usersService: UsersService,
+    private readonly smsService: SmsService,
     private readonly jwtService: JwtService,
   ) {}
 
-  async sendAuthenticationCode(receptor: string): Promise<string> {
+  async sendAuthenticationCode(phoneNumber: string): Promise<string> {
     const pin = authenticationCodeGenerator();
 
     try {
-      let authCode = (await this.authCodeRepo.find({ receptor }))[0];
+      let authCode = (await this.authCodeRepo.find({ phoneNumber }))[0];
       let reqId: string;
 
       if (!authCode) {
         authCode = this.authCodeRepo.create({
           pin,
-          receptor,
+          phoneNumber,
         });
 
         reqId = (await this.authCodeRepo.save(authCode)).id;
@@ -47,13 +49,12 @@ export class AuthService {
         });
       }
 
-      // const msg = await this.smsService.simpleSend({
-      //   message: `your authentication code: ${pin}`,
-      //   receptor: phoneNumber,
-      //   linenumber: '10008566',
-      // });
+      await this.smsService.sendAuthenticationCode({
+        text: `your authentication code: ${pin}`,
+        to: phoneNumber,
+      });
 
-      return reqId; // registeration request id
+      return reqId; // registration request id
     } catch (error: any) {
       throw new InternalServerErrorException(error.message);
     }
@@ -64,15 +65,15 @@ export class AuthService {
 
     if (!authCode) {
       throw new BadRequestException(
-        'pin you entered doesnt exist on database or expired',
+        'pin you entered does not exist on database or expired',
       );
     }
 
     if (pin === authCode.pin) {
-      return authCode.receptor;
+      return authCode.phoneNumber;
     }
 
-    throw new BadRequestException('pin you enterd is wrong');
+    throw new BadRequestException('pin you entered is wrong');
   }
 
   async registerUser(phoneNumber: string): Promise<User> {
