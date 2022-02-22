@@ -9,7 +9,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { isDev } from '../common/common.constants';
 import { authenticationCodeGenerator } from '../common/nanoid';
-import { SmsService } from '../sms/sms.service';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { LoginDto } from './dtos/login.dto';
@@ -23,7 +22,6 @@ export class AuthService {
     private readonly authCodeRepo: Repository<AuthCode>,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-    private readonly smsService: SmsService,
   ) {}
 
   async sendAuthenticationCode(receptor: string): Promise<string> {

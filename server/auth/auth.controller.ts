@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
+import { Public } from './decorators/public.decorator';
 import { RegisterActionDto } from './dtos/register-action.dto';
 import { AuthCodeGuard } from './guards/authentication-code.guard';
-import { JwtAuthGuard } from './guards/jwt.guard';
 import { JwtToken } from './interfaces/jwt-payload.interface';
 
 declare global {
@@ -18,12 +18,14 @@ declare global {
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post('register')
   async sendAuthenticationCode(@Body() { phoneNumber }: RegisterActionDto) {
     const reqId = await this.authService.sendAuthenticationCode(phoneNumber);
     return { reqId };
   }
 
+  @Public()
   @Post('verify')
   @UseGuards(AuthCodeGuard)
   verifyUser(@Req() req: Request): JwtToken {
@@ -31,7 +33,6 @@ export class AuthController {
   }
 
   @Get('profile')
-  @UseGuards(JwtAuthGuard)
   getProfile(@Req() req: Request) {
     return req.user;
   }

@@ -4,7 +4,7 @@ import { Request } from 'express';
 import { Strategy } from 'passport-custom';
 import { AuthService } from '../auth.service';
 import { LoginDto } from '../dtos/login.dto';
-import { VerifyAuthCodeDto } from '../dtos/verify-pin.dto';
+import { VerifyAuthCodeDto } from '../dtos/verify-auth-code.dto';
 
 @Injectable()
 export class AuthCodeStrategy extends PassportStrategy(Strategy, 'auth_code') {
