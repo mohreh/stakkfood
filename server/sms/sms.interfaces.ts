@@ -1,11 +1,9 @@
-export interface GhasedakOptions {
+export interface SmsModuleOptions {
   apiKey: string;
 }
 
-export interface SimpleMessage {
-  message: string;
-  receptor: string;
-  linenumber: string;
-  senddate?: string | Date;
-  checkid?: string;
+export interface SmsSubmitData {
+  text: string;
+  to: string;
+  from?: string;
 }
