@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { AuthCode } from './auth/entities/auth-code.entity';
 import { SmsModule } from './sms/sms.module';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
+import { RolesGuard } from './auth/guards/roles.guard';
 
 @Module({
   imports: [
@@ -66,6 +67,10 @@ import { JwtAuthGuard } from './auth/guards/jwt.guard';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
     AppService,
   ],

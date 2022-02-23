@@ -12,7 +12,6 @@ import { authenticationCodeGenerator } from '../common/nanoid';
 import { SmsService } from '../sms/sms.service';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
-import { LoginDto } from './dtos/login.dto';
 import { AuthCode } from './entities/auth-code.entity';
 import { JwtPayload, JwtToken } from './interfaces/jwt-payload.interface';
 
@@ -87,7 +86,7 @@ export class AuthService {
     return user;
   }
 
-  login({ id }: LoginDto): JwtToken {
+  login(id: string): JwtToken {
     const payload: JwtPayload = { sub: id };
     return {
       access_token: this.jwtService.sign(payload),

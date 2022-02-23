@@ -19,8 +19,8 @@ export class AuthCodeStrategy extends PassportStrategy(Strategy, 'auth_code') {
       pin,
     );
 
-    const { id } = await this.authService.registerUser(phoneNumber);
+    const { id, role } = await this.authService.registerUser(phoneNumber);
 
-    return { id };
+    return { id, role };
   }
 }

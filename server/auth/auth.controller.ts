@@ -21,6 +21,6 @@ export class AuthController {
   @Post('verify')
   @UseGuards(AuthCodeGuard)
   verifyUser(@Req() req: Request): JwtToken {
-    return this.authService.login({ id: req.user.id });
+    return this.authService.login(req.user.id);
   }
 }

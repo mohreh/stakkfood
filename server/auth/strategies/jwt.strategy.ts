@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthService } from '../auth.service';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
-import { UserDto } from 'server/users/dtos/user.dto';
+import { LoginDto } from '../dtos/login.dto';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -19,9 +19,15 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<UserDto> {
+  async validate(payload: JwtPayload): Promise<LoginDto> {
     const { sub } = payload;
-    const { id, name } = await this.authService.findById(sub);
-    return { id, name };
+    const user = await this.authService.findById(sub);
+
+    if (!user) {
+      throw new NotFoundException('user does not exist on database');
+    }
+
+    const { id, role } = user;
+    return { id, role };
   }
 }
