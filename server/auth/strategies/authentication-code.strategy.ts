@@ -3,8 +3,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-custom';
 import { AuthService } from '../auth.service';
-import { LoginDto } from '../dtos/login.dto';
-import { VerifyAuthCodeDto } from '../dtos/verify-auth-code.dto';
+import { UserLogin } from '../interfaces/user-login.interface';
+import { VerifyAuthCodeDto } from '../interfaces/verify-auth-code.interface';
 
 @Injectable()
 export class AuthCodeStrategy extends PassportStrategy(Strategy, 'auth_code') {
@@ -12,7 +12,7 @@ export class AuthCodeStrategy extends PassportStrategy(Strategy, 'auth_code') {
     super();
   }
 
-  async validate(req: Request): Promise<LoginDto> {
+  async validate(req: Request): Promise<UserLogin> {
     const { reqId, pin } = req.body as VerifyAuthCodeDto;
     const phoneNumber = await this.authService.verifyAuthenticationCode(
       reqId,

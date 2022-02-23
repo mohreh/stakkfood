@@ -6,15 +6,6 @@ import { UserDto } from './dtos/user.dto';
 import { UsersService } from './users.service';
 import { Serialize } from 'server/common/interceptors/serialize.interceptor';
 
-declare global {
-  namespace Express {
-    interface User {
-      id: string | undefined;
-      role: Role;
-    }
-  }
-}
-
 @Controller('users')
 @Serialize(UserDto)
 export class UsersController {
