@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "build:server": "nest build",
     "build:client": "nuxt build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"server/**/*.ts\" \"test/**/*.ts\"",
     "dev:server": "cross-env NODE_ENV=development nest start --watch",
     "dev:client": "cross-env NODE_ENV=development nuxt",
     "debug:server": "cross-env NODE_ENV=development  nest start --debug --watch",
@@ -95,6 +95,9 @@
     "typescript": "^4.3.5"
   },
   "jest": {
+    "moduleNameMapper": {
+      "^server/(.*)$": "<rootDir>/$1.ts"
+    },
     "moduleFileExtensions": [
       "js",
       "json",
@@ -109,6 +112,11 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "node_modules",
+      ".entity.ts",
+      ".constants.ts"
+    ]
   }
 }
