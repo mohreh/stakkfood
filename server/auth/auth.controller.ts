@@ -12,7 +12,9 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  async sendAuthenticationCode(@Body() { phoneNumber }: RegisterActionDto) {
+  async sendAuthenticationCode(
+    @Body() { phoneNumber }: RegisterActionDto,
+  ): Promise<{ reqId: string }> {
     const reqId = await this.authService.sendAuthenticationCode(phoneNumber);
     return { reqId };
   }
