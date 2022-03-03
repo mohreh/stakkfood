@@ -6,7 +6,6 @@ import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
-import exp from 'constants';
 import { SmsService } from '../sms/sms.service';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
