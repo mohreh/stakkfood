@@ -13,6 +13,8 @@ import { AuthCode } from './auth/entities/auth-code.entity';
 import { SmsModule } from './sms/sms.module';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
+import { AddressModule } from './address/address.module';
+import { Address } from './address/entities/address.entity';
 
 @Module({
   imports: [
@@ -46,7 +48,7 @@ import { RolesGuard } from './auth/guards/roles.guard';
           database: config.get('DB_NAME'),
           synchronize: config.get('NODE_ENV') !== 'production',
           logging: config.get('NODE_ENV') !== 'production',
-          entities: [User, AuthCode],
+          entities: [User, AuthCode, Address],
         };
       },
     }),
@@ -57,6 +59,7 @@ import { RolesGuard } from './auth/guards/roles.guard';
     UsersModule,
     AuthModule,
     SmsModule,
+    AddressModule,
   ],
   controllers: [AppController],
   providers: [
