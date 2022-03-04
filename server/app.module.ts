@@ -22,6 +22,7 @@ import { Address } from './address/entities/address.entity';
       validationSchema: Joi.object({
         SERVER_PORT: Joi.string(),
         MELIPAYAMAK_KEY: Joi.string().required(),
+        NESHAN_API_KEY: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRATION: Joi.string().required(),
         NODE_ENV: Joi.string()
@@ -54,6 +55,9 @@ import { Address } from './address/entities/address.entity';
     }),
     SmsModule.register({
       apiKey: process.env.MELIPAYAMAK_KEY,
+    }),
+    AddressModule.register({
+      apiKey: process.env.NESHAN_API_KEY,
     }),
     ScheduleModule.forRoot(),
     UsersModule,
