@@ -20,8 +20,9 @@ export class UsersController {
   }
 
   @Get('profile')
-  getProfile(@Req() req: Request) {
-    return req.user;
+  async getProfile(@Req() req: Request) {
+    return await this.usersService.findById(req.user.id);
+    // return req.user;
   }
 
   @Post('address')

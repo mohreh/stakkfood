@@ -27,7 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       throw new NotFoundException('user does not exist on database');
     }
 
-    const { id, role } = user;
-    return { id, role };
+    const { id, role, defaultAddress } = user;
+    return { id, role, defaultAddress };
   }
 }

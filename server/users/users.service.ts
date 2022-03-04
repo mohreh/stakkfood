@@ -14,7 +14,9 @@ export class UsersService {
   ) {}
 
   findAll() {
-    return this.usersRepo.find();
+    return this.usersRepo.find({
+      relations: ['defaultAddress'],
+    });
   }
 
   async findByIdAndUpdate(id: string, updateDto: any) {

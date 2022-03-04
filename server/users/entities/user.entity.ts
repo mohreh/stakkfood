@@ -23,9 +23,11 @@ export class User extends CoreEntity {
   role: Role;
 
   @OneToMany((_type) => Address, (address) => address.user)
+  @Expose()
   addresses: Address[];
 
   @OneToOne((_type) => Address, (address) => address.id)
   @JoinColumn()
+  @Expose()
   defaultAddress: Address;
 }
