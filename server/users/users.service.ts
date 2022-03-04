@@ -17,7 +17,7 @@ export class UsersService {
     return this.usersRepo.find();
   }
 
-  async findAndUpdate(id: string, updateDto: any) {
+  async findByIdAndUpdate(id: string, updateDto: any) {
     try {
       return await this.usersRepo.save({
         id,
@@ -33,7 +33,7 @@ export class UsersService {
 
     let user = await this.findById(id);
     if (!user.defaultAddress) {
-      await this.findAndUpdate(id, {
+      await this.findByIdAndUpdate(id, {
         defaultAddress: address,
       });
 

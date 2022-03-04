@@ -1,9 +1,8 @@
-import { PickType } from '@nestjs/mapped-types';
+import { OmitType } from '@nestjs/mapped-types';
 import { Address } from '../entities/address.entity';
 
-export class AddAddressDto extends PickType(Address, [
-  'description',
-  'latitude',
-  'longitude',
-  'user',
+export class AddAddressDto extends OmitType(Address, [
+  'setId',
+  'createdAt',
+  'updatedAt',
 ]) {}
