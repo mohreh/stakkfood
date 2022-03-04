@@ -1,8 +1,9 @@
 import { Expose } from 'class-transformer';
 import { IsEnum, IsPhoneNumber, IsString } from 'class-validator';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { CoreEntity } from 'server/common/entities/core.entity';
 import { Role } from 'server/auth/enum/role.enum';
+import { Address } from 'server/address/entities/address.entity';
 
 @Entity()
 export class User extends CoreEntity {
@@ -20,4 +21,11 @@ export class User extends CoreEntity {
   @IsEnum(Role)
   @Expose()
   role: Role;
+
+  @OneToMany((_type) => Address, (address) => address.user)
+  addresses: Address[];
+
+  @OneToOne((_type) => Address, (address) => address.id)
+  @JoinColumn()
+  defaultAddress: Address;
 }
