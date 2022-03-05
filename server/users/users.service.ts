@@ -1,8 +1,14 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AddressService } from '../address/address.service';
 import { AddAddressDto } from '../address/dtos/add-address.dto';
+import { UpdateAddressDto } from '../address/dtos/update-address.dto';
+import { Address } from '../address/entities/address.entity';
 import { RegisterActionDto } from '../auth/dtos/register-action.dto';
 import { User } from './entities/user.entity';
 
@@ -30,6 +36,28 @@ export class UsersService {
     }
   }
 
+  async addressOwner(addressId: string): Promise<User> {
+    const address = await this.addressService.findById(addressId);
+
+    return address.user;
+  }
+
+  async updateAddress(
+    addressId: string,
+    userId: string,
+    data: UpdateAddressDto,
+  ): Promise<User> {
+    const addressOwner = await this.addressOwner(addressId);
+
+    if (addressOwner.id !== userId) {
+      throw new BadRequestException('you cant edit this address');
+    }
+
+    await this.addressService.updateAddress(addressId, data);
+
+    return await this.findById(userId, ['addresses']);
+  }
+
   async addAddress(id: string, data: AddAddressDto): Promise<User> {
     const address = await this.addressService.createAddress(data);
 
@@ -49,9 +77,12 @@ export class UsersService {
     return (await this.usersRepo.find({ phoneNumber }))[0];
   }
 
-  findById(id: string): Promise<User> {
+  findById(
+    id: string,
+    relations: string[] = ['defaultAddress', 'addresses'],
+  ): Promise<User> {
     return this.usersRepo.findOne(id, {
-      relations: ['defaultAddress', 'addresses'],
+      relations,
     });
   }
 
