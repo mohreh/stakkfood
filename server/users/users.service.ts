@@ -8,8 +8,8 @@ import { Repository } from 'typeorm';
 import { AddressService } from '../address/address.service';
 import { AddAddressDto } from '../address/dtos/add-address.dto';
 import { UpdateAddressDto } from '../address/dtos/update-address.dto';
-import { Address } from '../address/entities/address.entity';
 import { RegisterActionDto } from '../auth/dtos/register-action.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -25,7 +25,7 @@ export class UsersService {
     });
   }
 
-  async findByIdAndUpdate(id: string, updateDto: any) {
+  async findByIdAndUpdate(id: string, updateDto: UpdateUserDto) {
     try {
       return await this.usersRepo.save({
         id,
@@ -39,7 +39,50 @@ export class UsersService {
   async addressOwner(addressId: string): Promise<User> {
     const address = await this.addressService.findById(addressId);
 
-    return address.user;
+    if (!address) {
+      throw new BadRequestException('address does not exist');
+    }
+
+    return await this.findById(address.user.id);
+  }
+
+  async deleteAddress(userId: string, addressId: string): Promise<User> {
+    const addressOwner = await this.addressOwner(addressId);
+
+    if (addressOwner.id !== userId) {
+      throw new BadRequestException('you cant delete this address');
+    }
+
+    if (addressOwner.defaultAddress.id === addressId) {
+      if (addressOwner.addresses.length === 1) {
+        await this.findByIdAndUpdate(addressOwner.id, {
+          defaultAddress: null,
+        });
+      } else {
+        await this.findByIdAndUpdate(addressOwner.id, {
+          defaultAddress: addressOwner.addresses.filter(
+            (address) => address.id !== addressId,
+          )[0],
+        });
+      }
+    }
+
+    await this.addressService.deleteAddress(addressId);
+    return this.findById(userId);
+  }
+
+  async changeDefaultAddress(userId: string, addressId: string): Promise<User> {
+    const address = await this.addressService.findById(addressId);
+
+    if (address.user.id !== userId) {
+      throw new BadRequestException('you cant access this address');
+    }
+
+    await this.findByIdAndUpdate(userId, {
+      defaultAddress: address,
+    });
+
+    return await this.findById(userId);
   }
 
   async updateAddress(

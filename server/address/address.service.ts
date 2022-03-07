@@ -47,6 +47,13 @@ export class AddressService {
     }
   }
 
+  async deleteAddress(addressId: string) {
+    try {
+      return await this.addressRepo.delete(addressId);
+    } catch (err: any) {
+      throw new InternalServerErrorException(err.message);
+    }
+  }
   // async request(reqUrl: string, method: Method = 'GET') {
   //   return await axios.request({
   //     method,

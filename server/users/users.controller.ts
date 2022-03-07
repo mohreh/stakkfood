@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Req,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { AddAddressDto } from '../address/dtos/add-address.dto';
 import { Role } from '../auth/enum/role.enum';
@@ -32,7 +40,13 @@ export class UsersController {
     return this.usersService.addAddress(req.user.id, data);
   }
 
-  // deleteAddress() {}
+  @Delete('address/:addressId')
+  deleteAddress(
+    @Req() req: Request,
+    @Param('addressId') addressId: string,
+  ): Promise<User> {
+    return this.usersService.deleteAddress(req.user.id, addressId);
+  }
 
   @Post('address/:addressId')
   updateAddress(
@@ -43,5 +57,11 @@ export class UsersController {
     return this.usersService.updateAddress(addressId, req.user.id, body);
   }
 
-  // changeDefaultAddress() {}
+  @Get('address/:addressId/change-default')
+  changeDefaultAddress(
+    @Req() req: Request,
+    @Param('addressId') addressId: string,
+  ): Promise<User> {
+    return this.usersService.changeDefaultAddress(req.user.id, addressId);
+  }
 }
