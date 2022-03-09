@@ -36,7 +36,7 @@ export class UsersService {
     }
   }
 
-  async addressOwner(addressId: string): Promise<User> {
+  private async addressOwner(addressId: string): Promise<User> {
     const address = await this.addressService.findById(addressId);
 
     if (!address) {
@@ -72,11 +72,12 @@ export class UsersService {
   }
 
   async changeDefaultAddress(userId: string, addressId: string): Promise<User> {
-    const address = await this.addressService.findById(addressId);
+    const addressOwner = await this.addressOwner(addressId);
 
-    if (address.user.id !== userId) {
+    if (addressOwner.id !== userId) {
       throw new BadRequestException('you cant access this address');
     }
+    const address = await this.addressService.findById(addressId);
 
     await this.findByIdAndUpdate(userId, {
       defaultAddress: address,
