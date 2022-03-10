@@ -4,6 +4,7 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { CoreEntity } from 'server/common/entities/core.entity';
 import { Role } from 'server/auth/enum/role.enum';
 import { Address } from 'server/address/entities/address.entity';
+import { Restaurant } from 'server/restaurants/entities/restaurants.entity';
 
 @Entity()
 export class User extends CoreEntity {
@@ -30,4 +31,11 @@ export class User extends CoreEntity {
   @JoinColumn()
   @Expose()
   defaultAddress: Address;
+
+  @OneToOne((_type) => Restaurant, (restaurant) => restaurant.id, {
+    nullable: true,
+  })
+  @JoinColumn()
+  @Expose()
+  restaurant: Restaurant;
 }

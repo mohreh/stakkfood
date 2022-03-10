@@ -16,6 +16,7 @@ import { RolesGuard } from './auth/guards/roles.guard';
 import { AddressModule } from './address/address.module';
 import { Address } from './address/entities/address.entity';
 import { RestaurantsModule } from './restaurants/restaurants.module';
+import { Restaurant } from './restaurants/entities/restaurants.entity';
 
 @Module({
   imports: [
@@ -50,7 +51,7 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
           database: config.get('DB_NAME'),
           synchronize: config.get('NODE_ENV') !== 'production',
           logging: config.get('NODE_ENV') !== 'production',
-          entities: [User, AuthCode, Address],
+          entities: [User, AuthCode, Address, Restaurant],
         };
       },
     }),

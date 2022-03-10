@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 import { IsObject, IsString } from 'class-validator';
-import { Column, Entity, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { CoreEntity } from 'server/common/entities/core.entity';
 import { User } from 'server/users/entities/user.entity';
 
@@ -11,8 +11,8 @@ export class Restaurant extends CoreEntity {
   @Expose()
   name: string;
 
-  @Column()
   @OneToOne((_type) => User, (user) => user.id, { nullable: false })
+  @JoinColumn()
   @Expose()
   owner: User;
 }
