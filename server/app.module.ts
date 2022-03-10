@@ -15,6 +15,7 @@ import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { AddressModule } from './address/address.module';
 import { Address } from './address/entities/address.entity';
+import { RestaurantsModule } from './restaurants/restaurants.module';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { Address } from './address/entities/address.entity';
     AuthModule,
     SmsModule,
     AddressModule,
+    RestaurantsModule,
   ],
   controllers: [AppController],
   providers: [
