@@ -1,8 +1,6 @@
-import { PickType } from '@nestjs/mapped-types';
+import { PartialType, PickType } from '@nestjs/mapped-types';
 import { Address } from '../entities/address.entity';
 
-export class UpdateAddressDto extends PickType(Address, [
-  'description',
-  'latitude',
-  'longitude',
-]) {}
+export class UpdateAddressDto extends PartialType(
+  PickType(Address, ['description', 'latitude', 'longitude']),
+) {}
